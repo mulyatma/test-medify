@@ -6,23 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MasterItem extends Model
+class Category extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
         'kode',
-        'nama',
-        'harga_beli',
-        'laba',
-        'supplier',
-        'jenis',
-        'foto'
+        'nama'
     ];
 
-    public function category()
+    public function masterItems()
     {
-        return $this->belongsToMany(Category::class, 'category_master_item');
+        return $this->belongsToMany(MasterItem::class, 'category_master_item', 'category_id', 'master_item_id');
     }
 }

@@ -21,13 +21,23 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/master-items', [App\Http\Controllers\MasterItemsController::class, 'index']);
-Route::get('/master-items/search', [App\Http\Controllers\MasterItemsController::class, 'search']);
-Route::get('/master-items/form/{method}/{id?}', [App\Http\Controllers\MasterItemsController::class, 'formView']);
-Route::post('/master-items/form/{method}/{id?}', [App\Http\Controllers\MasterItemsController::class, 'formSubmit']);
 
-Route::get('/master-items/view/{kode}', [App\Http\Controllers\MasterItemsController::class, 'singleView']);
-Route::get('/master-items/delete/{id}', [App\Http\Controllers\MasterItemsController::class, 'delete']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/master-items', [App\Http\Controllers\MasterItemsController::class, 'index']);
+    Route::get('/master-items/search', [App\Http\Controllers\MasterItemsController::class, 'search']);
+    Route::get('/master-items/download-excel', [App\Http\Controllers\MasterItemsController::class, 'downloadExcel']);
+    Route::get('/master-items/form/{method}/{id?}', [App\Http\Controllers\MasterItemsController::class, 'formView']);
+    Route::post('/master-items/form/{method}/{id?}', [App\Http\Controllers\MasterItemsController::class, 'formSubmit']);
+    Route::get('/master-items/view/{kode}', [App\Http\Controllers\MasterItemsController::class, 'singleView']);
+    Route::delete('/master-items/delete/{id}', [App\Http\Controllers\MasterItemsController::class, 'delete']);
+    Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);
 
-
-Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);
+    // Category routes
+    Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
+    Route::get('/categories/search', [App\Http\Controllers\CategoryController::class, 'search']);
+    Route::get('/categories/form/{method}/{id?}', [App\Http\Controllers\CategoryController::class, 'formView'])->name('category.form');
+    Route::post('/categories/form/{method}/{id?}', [App\Http\Controllers\CategoryController::class, 'formSubmit']);
+    Route::get('/categories/view/{id}', [App\Http\Controllers\CategoryController::class, 'singleView'])->name('category.single');
+    Route::get('/categories/print/{id}', [App\Http\Controllers\CategoryController::class, 'printView'])->name('category.print');
+    Route::delete('/categories/delete/{id}', [App\Http\Controllers\CategoryController::class, 'delete']);
+});
